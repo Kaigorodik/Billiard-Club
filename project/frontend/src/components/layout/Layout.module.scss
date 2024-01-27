@@ -1,0 +1,15 @@
+.profileLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 50px;
+  min-width: 90vw;
+}
+
+
+@media (max-width: 800px) {
+  .profileLayout {
+    display: flex;
+    flex-direction: column;
+  }
+}

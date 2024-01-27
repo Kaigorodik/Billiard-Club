@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+    http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd ">
+    <changeSet id="user" author="Rail Mukhamadiev">
+        <dropTable tableName="refresh_token"/>
+        <dropTable tableName="usr"/>
+        <createTable tableName="users">
+            <column name="user_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(200)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password_hash" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(200)"/>
+            <column name="phone" type="varchar(20)"/>
+            <column name="role" type="int"/>
+        </createTable>
+        <createTable tableName="refresh_tokens">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="token" type="uuid">
+                <constraints unique="true"/>
+            </column>
+            <column name="expiry_date" type="timestamp with timezone"/>
+            <column name="user_login" type="varchar(255)">
+                <constraints references="users(email)" foreignKeyName="user_token_fk"/>
+            </column>
+        </createTable>
+        <createTable tableName="clubs">
+            <column name = "club_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name = "admin_id" type="bigint">
+                <constraints references="users(user_id)" foreignKeyName="clubs_users_fk"/>
+            </column>
+            <column name = "title" type="varchar(200)"/>
+            <column name = "city" type="varchar(200)"/>
+            <column name = "address" type="varchar(200)"/>
+            <column name = "url" type="varchar(200)"/>
+            <column name = "phone" type="varchar(20)"/>
+        </createTable>
+        <createTable tableName="schedules">
+            <column name = "schedule_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name = "club_id" type="bigint">
+                <constraints references="clubs(club_id)" foreignKeyName="schedules_clubs_fk"/>
+            </column>
+            <column name = "weekday" type="int"/>
+            <column name = "start_time" type="time"/>
+            <column name = "end_time" type="time"/>
+        </createTable>
+        <createTable tableName="prices">
+            <column name="schedule_id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="prices_pk" nullable="false"
+                             references="schedules(schedule_id)" foreignKeyName="prices_schedules_fk"/>
+            </column>
+            <column name="billiard_type" type="int">
+                <constraints primaryKey="true" primaryKeyName="prices_pk" nullable="false"/>
+            </column>
+            <column name="price" type="int"/>
+        </createTable>
+        <createTable tableName="tables">
+            <column name="table_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="club_id" type="bigint">
+                <constraints references="clubs(club_id)" foreignKeyName="tables_clubs_fk"/>
+            </column>
+            <column name="billiard_type" type="int"/>
+        </createTable>
+        <createTable tableName="bookings">
+            <column name="user_id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="bookings_pk" nullable="false"
+                             references="users(user_id)" foreignKeyName="book_user_fk"/>
+            </column>
+            <column name="table_id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="bookings_pk" nullable="false"
+                             references="tables(table_id)" foreignKeyName="book_table_fk"/>
+            </column>
+            <column name = "schedule_id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="bookings_pk" nullable="false"
+                             references="schedules(schedule_id)" foreignKeyName="book_schedule_fk"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

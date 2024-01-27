@@ -1,0 +1,17 @@
+export enum ActionType {
+    Login,
+    Logout,
+    CloseMainMenu,
+    SetPage,
+    SetPageSize,
+    InitPaging,
+    OpenDialog,
+    ShowMessage,
+    HideMessage,
+    SetCity,
+    SetOptions,
+    SetRegisterPassword,
+    ChangePassword,
+    SetProfile,
+    SetDefaultProfile,
+}

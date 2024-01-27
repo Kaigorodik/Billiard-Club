@@ -1,0 +1,31 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  liquibase:
+    enabled: true #TODO: enable
+    change-log: classpath:changelogs/master-changelog.xml
+  mvc:
+    static-path-pattern: /**
+  web:
+    resources:
+      static-locations: classpath:./static #frontend/build
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/billiard_lub}
+    username: ${DB_USERNAME:billiard_club}
+    password: ${DB_PASS:12345}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    show-sql: false
+    hibernate:
+      ddl-auto: none #update
+
+app:
+  swagger:
+    host: ${SWAGGER_HOST:localhost}
+    context: docinfo
+  jwt:
+    secret: ${JWT_SECRET:BilliardClubSecretCode}
+    expirationMs: 3600000
+    refreshExpirationMs: 3600000
